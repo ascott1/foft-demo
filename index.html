@@ -1,0 +1,153 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script>
+          // if fonts are in the cache, set the font-loaded class immediately
+          if (sessionStorage.fontsLoaded) {
+            var html = document.documentElement;
+            html.classList.add('font-loaded');
+          }
+        </script>
+        <style>
+
+          @font-face {
+             font-family: Bitter;
+             src: local('Bitter'),
+                  url('fonts/Regular/Bitter-Regular.woff') format('woff'),
+                  url('fonts/Regular/Bitter-Regular.ttf') format('ttf'),
+                  url('fonts/Regular/Bitter-Regular.eot') format('eot');
+             font-weight: 400;
+             font-style: normal;
+          }
+
+          @font-face {
+             font-family: BitterBold;
+             src: local('Bitter Bold'),
+                  url('fonts/Bold/Bitter-Bold.woff') format('woff'),
+                  url('fonts/Bold/Bitter-Bold.ttf') format('ttf'),
+                  url('fonts/Bold/Bitter-Bold.eot') format('eot');
+             font-weight: 700;
+             font-style: normal;
+          }
+
+          @font-face {
+             font-family: BitterItalic;
+             src: local('Bitter Italic'),
+                  url('fonts/Italic/Bitter-Italic.woff') format('woff'),
+                  url('fonts/Italic/Bitter-Italic.ttf') format('ttf'),
+                  url('fonts/Italic/Bitter-Italic.eot') format('eot');
+             font-weight: 400;
+             font-style: normal;
+          }
+
+          body {
+            font-size: 120%;
+            max-width: 600px;
+            margin: 0 auto;
+            font-family: sans-serif;
+          }
+
+          /* if we did not set a font style on the body,
+          we should set one here in case our fonts fail to load */
+          .font-failed body {
+            font-family: sans-serif;
+          }
+
+          /* if we did not set a font style on the body,
+          we should set one here in case our fonts fail to load */
+          .font-loaded body {
+            font-family: Bitter;
+          }
+
+          /* if we did not set a font style on the body,
+          we should set one here in case our fonts fail to load */
+          .font-b-loaded h1 {
+            font-family: BitterBold;
+          }
+
+          .font-b-loaded strong {
+            font-family: BitterBold;
+          }
+
+          .font-b-loaded em {
+            font-family: BitterItalic;
+          }
+
+          /* if we want to mimic FOIT we can hide the body
+          when the initial font file is loading
+          I would recommend against this unless necessary
+          .font-loading body {
+            visibility: hidden;
+          }
+          */
+
+        </style>
+
+    </head>
+    <body>
+        <h1>Font Loading Demo</h1>
+
+        <p><em>Hello</em> <strong>world!</strong></p>
+
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. </p>
+
+        <p>Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero. Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor. Maecenas mattis. Sed convallis tristique sem. Proin ut ligula vel nunc egestas porttitor. Morbi lectus risus, iaculis vel, suscipit quis, luctus non, massa. Fusce ac turpis quis ligula lacinia aliquet. </p>
+
+        <p>Mauris ipsum. Nulla metus metus, ullamcorper vel, tincidunt sed, euismod in, nibh. Quisque volutpat condimentum velit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam nec ante. Sed lacinia, urna non tincidunt mattis, tortor neque adipiscing diam, a cursus ipsum ante quis turpis. Nulla facilisi. Ut fringilla. Suspendisse potenti. Nunc feugiat mi a tellus consequat imperdiet. Vestibulum sapien. </p>
+
+        <p>Proin quam. Etiam ultrices. Suspendisse in justo eu magna luctus suscipit. Sed lectus. Integer euismod lacus luctus magna. Quisque cursus, metus vitae pharetra auctor, sem massa mattis sem, at interdum magna augue eget diam. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Morbi lacinia molestie dui. Praesent blandit dolor. Sed non quam. In vel mi sit amet augue congue elementum. Morbi in ipsum sit amet pede facilisis laoreet. Donec lacus nunc, viverra nec, blandit vel, egestas et, augue. Vestibulum tincidunt malesuada tellus. Ut ultrices ultrices enim. </p>
+
+        <p>Curabitur sit amet mauris. Morbi in dui quis est pulvinar ullamcorper. Nulla facilisi. Integer lacinia sollicitudin massa. Cras metus. Sed aliquet risus a tortor. Integer id quam. Morbi mi. Quisque nisl felis, venenatis tristique, dignissim in, ultrices sit amet, augue. Proin sodales libero eget ante. Nulla quam. </p>
+
+
+        <script src="fontfaceobserver.standalone.js"></script>
+        <script>
+          var html = document.documentElement;
+
+          // we can set a class on the html el when fonts are loading
+          html.classList.add('font-loading');
+
+          // create an observer for the default font weight
+          var regular = new FontFaceObserver( 'Bitter', {
+            weight: 400
+          });
+
+          var bold = new FontFaceObserver( 'BitterBold', {
+            weight: 700
+          });
+
+          var italic = new FontFaceObserver( 'BitterItalic', {
+            style: 'italic'
+          });
+
+          regular.check().then(function () {
+            // add the font-loaded class
+            // when our default weight has dowloaded
+            html.classList.remove('font-loading');
+            html.classList.add('font-loaded');
+
+            // use a JS promise to add a class when additional weights
+            // and styles have downloaded
+            // Font Face Observer ships with a promise polyfill
+            Promise
+              .all([bold.check(), italic.check()])
+              .then(function () {
+                html.classList.add('font-b-loaded');
+                sessionStorage.fontsLoaded = true;
+              });
+            }).catch(function () {
+              html.classList.remove('font-loading');
+              html.classList.add('font-failed');
+              sessionStorage.fontsLoaded = false;
+          });
+
+
+        </script>
+
+    </body>
+</html>
