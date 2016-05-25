@@ -10,7 +10,7 @@
           // if fonts are in the cache, set the font-loaded class immediately
           if (sessionStorage.fontsLoaded) {
             var html = document.documentElement;
-            html.classList.add('font-loaded');
+            html.classList.add('font-loaded', 'font-b-loaded');
           }
         </script>
         <style>
@@ -110,42 +110,46 @@
         <script>
           var html = document.documentElement;
 
-          // we can set a class on the html el when fonts are loading
-          html.classList.add('font-loading');
+          if (!sessionStorage.fontsLoaded) {
 
-          // create an observer for the default font weight
-          var regular = new FontFaceObserver( 'Bitter', {
-            weight: 400
-          });
+            // we can set a class on the html el when fonts are loading
+            html.classList.add('font-loading');
 
-          var bold = new FontFaceObserver( 'BitterBold', {
-            weight: 700
-          });
+            // create an observer for the default font weight
+            var regular = new FontFaceObserver( 'Bitter', {
+              weight: 400
+            });
 
-          var italic = new FontFaceObserver( 'BitterItalic', {
-            style: 'italic'
-          });
+            var bold = new FontFaceObserver( 'BitterBold', {
+              weight: 700
+            });
 
-          regular.check().then(function () {
-            // add the font-loaded class
-            // when our default weight has dowloaded
-            html.classList.remove('font-loading');
-            html.classList.add('font-loaded');
+            var italic = new FontFaceObserver( 'BitterItalic', {
+              style: 'italic'
+            });
 
-            // use a JS promise to add a class when additional weights
-            // and styles have downloaded
-            // Font Face Observer ships with a promise polyfill
-            Promise
-              .all([bold.check(), italic.check()])
-              .then(function () {
-                html.classList.add('font-b-loaded');
-                sessionStorage.fontsLoaded = true;
-              });
-            }).catch(function () {
+            regular.check().then(function () {
+              // add the font-loaded class
+              // when our default weight has dowloaded
               html.classList.remove('font-loading');
-              html.classList.add('font-failed');
-              sessionStorage.fontsLoaded = false;
-          });
+              html.classList.add('font-loaded');
+
+              // use a JS promise to add a class when additional weights
+              // and styles have downloaded
+              // Font Face Observer ships with a promise polyfill
+              Promise
+                .all([bold.check(), italic.check()])
+                .then(function () {
+                  html.classList.add('font-b-loaded');
+                  sessionStorage.fontsLoaded = true;
+                });
+              }).catch(function () {
+                html.classList.remove('font-loading');
+                html.classList.add('font-failed');
+                sessionStorage.fontsLoaded = false;
+            });
+
+          }
 
 
         </script>
