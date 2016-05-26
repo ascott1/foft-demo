@@ -45,6 +45,16 @@
              font-style: normal;
           }
 
+          @font-face {
+             font-family: BitterBoldItalic;
+             src: local('Bitter Bold Italic'),
+                  url('fonts/Bolditalic/Bitter-Bolditalic.woff') format('woff'),
+                  url('fonts/Bolditalic/Bitter-Bolditalic.ttf') format('ttf'),
+                  url('fonts/Bolditalic/Bitter-Bolditalic.eot') format('eot');
+             font-weight: 400;
+             font-style: normal;
+          }
+
           body {
             font-size: 120%;
             max-width: 600px;
@@ -79,6 +89,10 @@
             font-family: BitterItalic;
           }
 
+          .font-b-loaded .extra-strong {
+            font-family: BitterBoldItalic;
+          }
+
           /* if we want to mimic FOIT we can hide the body
           when the initial font file is loading
           I would recommend against this unless necessary
@@ -93,7 +107,7 @@
     <body>
         <h1>Font Loading Demo</h1>
 
-        <p><em>Hello</em> <strong>world!</strong></p>
+        <p><em>Hello</em> <strong>world</strong><strong class="extra-strong">!</strong></p>
 
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. </p>
 
@@ -128,6 +142,11 @@
               style: 'italic'
             });
 
+            var boldItalic = new FontFaceObserver( 'BitterBolditalic', {
+              weight: 700,
+              style: 'italic'
+            });
+
             regular.check().then(function () {
               // add the font-loaded class
               // when our default weight has dowloaded
@@ -138,7 +157,11 @@
               // and styles have downloaded
               // Font Face Observer ships with a promise polyfill
               Promise
-                .all([bold.check(), italic.check()])
+                .all([
+                  bold.check(),
+                  italic.check(),
+                  boldItalic.check()
+                ])
                 .then(function () {
                   html.classList.add('font-b-loaded');
                   sessionStorage.fontsLoaded = true;
